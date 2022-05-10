@@ -1,8 +1,8 @@
 import React from "react";
-import chair from '../../assets/images/chair.png'
+import chair from "../../assets/images/chair.png";
 export const Banner = () => {
   return (
-    <div class="hero min-h-screen px-12 bg-banner bg-banner-opacity-10">
+    <div class="hero min-h-screen bg-banner bg-banner-opacity-10">
       <div class="hero-content flex-col lg:flex-row-reverse">
         <img src={chair} alt="" class="max-w-xl rounded-lg shadow-2xl" />
         <div>
