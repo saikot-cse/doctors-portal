@@ -2,7 +2,7 @@ import doctorImage from "../../assets/images/doctor.png";
 import { PrimaryButton } from "../Shared/PrimaryButton";
 export const MakeAppoinment = () => {
   return (
-    <section className="flex justify-center items-center bg-apponment_banner mt-24">
+    <section className="flex justify-center items-center bg-appoinment mt-24 mb-12">
       <div className="flex-1 hidden lg:block">
         <img className="mt-[-150px]" src={doctorImage} alt="" />
       </div>
