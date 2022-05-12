@@ -35,7 +35,7 @@ export const Testimonials = () => {
           <img className="w-24 lg:w-48" src={quote} alt="" />
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-3 gap-12">
+      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-3 gap-5 mt-12">
         {
           reviews.map(review=><Reviews key={review._id} review={review}/>)
         }

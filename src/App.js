@@ -7,6 +7,7 @@ import { Reviews } from "./Pages/Reviews/Reviews";
 import { Contact } from "./Pages/Contact/Contact";
 import { Login } from "./Pages/Login/Login";
 import { Notfound } from "./Pages/NotFound/Notfound";
+import { Footer } from "./Pages/Shared/Footer";
 function App() {
   return (
     <div>
@@ -21,6 +22,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="*" element={<Notfound />} />
       </Routes>
+      <Footer/>
     </div>
   );
 }
