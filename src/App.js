@@ -7,10 +7,9 @@ import { Reviews } from "./Pages/Reviews/Reviews";
 import { Contact } from "./Pages/Contact/Contact";
 import { Login } from "./Pages/Login/Login";
 import { Notfound } from "./Pages/NotFound/Notfound";
-import { Footer } from "./Pages/Shared/Footer";
 function App() {
   return (
-    <div>
+    <div className="max-w-7xl mx-auto px-10">
       <Navbar/>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -22,7 +21,6 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="*" element={<Notfound />} />
       </Routes>
-      <Footer/>
     </div>
   );
 }

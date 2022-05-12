@@ -2,38 +2,38 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
-    <footer class="px-10 bg-footer bg-fixed text-black-content">
+    <footer className="px-10 bg-footer bg-contain text-black-content">
       <div className="footer">
         <div className="mx-auto">
-          <span class="footer-title text-primary font-bold uppercase">Services</span>
-          <Link to="" class="link link-hover">
+          <span className="footer-title text-primary font-bold uppercase">Services</span>
+          <Link to="" className="link link-hover">
             Emergency Checkup
           </Link>
-          <Link to="" class="link link-hover">
+          <Link to="" className="link link-hover">
             Monthly Checkup
           </Link>
-          <Link to="" class="link link-hover">
+          <Link to="" className="link link-hover">
             Weekly Checkup
           </Link>
-          <Link to="" class="link link-hover">
+          <Link to="" className="link link-hover">
             Deep Checkup
           </Link>
         </div>
         <div className="mx-auto">
-          <span class="footer-title text-primary font-bold">ORAL HEALTH</span>
-          <Link to="" class="link link-hover">
+          <span className="footer-title text-primary font-bold">ORAL HEALTH</span>
+          <Link to="" className="link link-hover">
             Fluoride Treatment
           </Link>
-          <Link to="" class="link link-hover">
+          <Link to="" className="link link-hover">
             Cavity Filling
           </Link>
-          <Link to="" class="link link-hover">
+          <Link to="" className="link link-hover">
             Teath Whitening
           </Link>
         </div>
         <div className="mx-auto">
-          <span class="footer-title text-primary font-bold">OUR ADDRESS</span>
-          <Link to="" class="link link-hover">New York - Hudson</Link>
+          <span className="footer-title text-primary font-bold">OUR ADDRESS</span>
+          <Link to="" className="link link-hover">New York - Hudson</Link>
         </div>
       </div>
 

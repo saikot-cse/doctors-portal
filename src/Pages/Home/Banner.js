@@ -3,7 +3,7 @@ import chair from "../../assets/images/chair.png";
 import { PrimaryButton } from "../Shared/PrimaryButton";
 export const Banner = () => {
   return (
-    <div className="hero min-h-screen bg-banner bg-banner-opacity-10">
+    <div className="hero min-h-screen bg-banner">
       <div className="hero-content flex-col lg:flex-row-reverse">
         <img style={{ width: "40rem" }} src={chair} alt="" className="max-w-full rounded-lg shadow-2xl" />
         <div>

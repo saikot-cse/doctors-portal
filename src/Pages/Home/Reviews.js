@@ -3,8 +3,8 @@ export const Reviews = ({ review }) => {
     <div className="card max-w-lg bg-base-100 shadow-xl">
       <div className="card-body">
         <p>{review.review}</p>
-        <div class="flex justify-start items-center">
-          <div class="w-16 rounded-full ring ring-primary ring-offset-base-100 mr-5 mt-2">
+        <div className="flex justify-start items-center">
+          <div className="w-16 rounded-full ring ring-primary ring-offset-base-100 mr-5 mt-2">
             <img src={review.image} alt="" />
           </div>
           <div>
