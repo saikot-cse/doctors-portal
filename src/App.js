@@ -9,7 +9,7 @@ import { Login } from "./Pages/Login/Login";
 import { Notfound } from "./Pages/NotFound/Notfound";
 function App() {
   return (
-    <div className="box-border">
+    <div>
       <Navbar/>
       <Routes>
         <Route path="/" element={<Home />} />
