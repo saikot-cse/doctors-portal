@@ -1,20 +1,32 @@
 import React from "react";
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import auth from "../../firebase.init";
+import { Loading } from "../Shared/Loading";
 import { PrimaryButton } from "../Shared/PrimaryButton";
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
 export const Login = () => {
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
-  if (error) {
-    return (
-      <div>
-        <p>Error: {error.message}</p>
-      </div>
-    );
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+  const onSubmit = (data) => signInWithEmailAndPassword(data.email, data.password);
+  const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
+  const [
+    signInWithEmailAndPassword,
+    user,
+    loading,
+    error,
+  ] = useSignInWithEmailAndPassword(auth);
+  let signInError;
+  if (googleError || error) {
+    signInError = <p className="text-red-600">Error: {error?.message || googleError?.message}</p>
   }
-  if (loading) {
-    return <p>Loading...</p>;
+  if (googleLoading || loading) {
+    return <Loading/>;
   }
-  if (user) {
+  if (googleUser || user) {
     return (
       <div>
         <p>Signed In User: {user.email}</p>
@@ -25,12 +37,64 @@ export const Login = () => {
     <div className="flex justify-center items-center h-screen">
       <div className="card mx-w-lg bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="text-center font-bold text-primary text-3xl">Login</h2>
+          <h2 className="text-center font-bold text-3xl">Login</h2>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">Email</span>
+              </label>
+              <input
+                {...register("email", {
+                  required:{
+                    value: true,
+                    message: "Email is required"
+                  },
+                  pattern: {
+                    value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                    message: "Please enter valid email",
+                  },
+                })}
+                type="email"
+                placeholder="Enter your email"
+                className="input input-bordered w-full max-w-xs"
+              />
+              <label className="label">
+              {errors.email?.type === "required" && <span className="label-text-alt text-red-600">{errors.email.message}</span>}
+              {errors.email?.type === "pattern" && <span className="label-text-alt text-red-600">{errors.email.message}</span>}
+              </label>
+            </div>
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">Password</span>
+              </label>
+              <input
+                {...register("password", {
+                  required:{
+                    value: true,
+                    message: "Password is required"
+                  },
+                  minLength: {
+                    value: 6,
+                    message: "Password must be minimum 6 characters",
+                  },
+                })}
+                type="password"
+                placeholder="Enter your password"
+                className="input input-bordered w-full max-w-xs"
+              />
+              <label className="label">
+              {errors.password?.type === "required" && <span className="label-text-alt text-red-600">{errors.password.message}</span>}
+              {errors.password?.type === "minLength" && <span className="label-text-alt text-red-600">{errors.password.message}</span>}
+              </label>
+            </div>
+            {signInError}
+            <input className="btn text-white w-full max-w-xs" type="submit" value="Login"/>
+          </form>
+          <p className="text-sm text-center">New to Doctor's portal? <Link to="/signup" className="text-primary font-bold">Create an account</Link></p>
           <div className="divider">OR</div>
-          <button onClick={() => signInWithGoogle()} class="btn btn-outline">Continue With Google</button>
-          <div className="card-actions justify-end">
-            <PrimaryButton>Login</PrimaryButton>
-          </div>
+          <button onClick={() => signInWithGoogle()} className="btn btn-outline">
+            Continue With Google
+          </button>
         </div>
       </div>
     </div>
