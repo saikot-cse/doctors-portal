@@ -1,4 +1,3 @@
-import React from "react";
 
 export const InfoCard = ({img,cardTitle,cardDesc,bgClass}) => {
   return (

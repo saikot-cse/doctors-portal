@@ -7,7 +7,7 @@ export const AvailableAppoinment = ({ date }) => {
   const [services, setServices] = useState([]);
   const [treatment, setTreatment] = useState(null);
   useEffect(() => {
-    fetch("service.json")
+    fetch("http://localhost:5555/service")
       .then((res) => res.json())
       .then((data) => setServices(data));
   }, []);

@@ -1,5 +1,3 @@
-import React from "react";
-
 export const SingleService = ({ service }) => {
   return (
     <div className="card lg:max-w-lg bg-base-100 shadow-xl">

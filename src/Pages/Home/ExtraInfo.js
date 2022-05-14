@@ -1,4 +1,3 @@
-import React from "react";
 import treatment from "../../assets/images/treatment.png";
 import { PrimaryButton } from "../Shared/PrimaryButton";
 export const ExtraInfo = () => {
