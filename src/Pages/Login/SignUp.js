@@ -1,10 +1,10 @@
 import React from "react";
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
 import { Loading } from "../Shared/Loading";
-export const Login = () => {
+export const SignUp = () => {
   const navigate = useNavigate();
   const {
     register,
@@ -12,15 +12,14 @@ export const Login = () => {
     handleSubmit,
   } = useForm();
   const onSubmit = (data) => {
-    signInWithEmailAndPassword(data.email, data.password);
-    navigate("/");
-
+    createUserWithEmailAndPassword(data.email, data.password);
+    navigate("/login");
   };
   const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
-  const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
-  let signInError;
+  const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(auth);
+  let signUpError;
   if (googleError || error) {
-    signInError = <p className="text-red-600">Error: {error?.message || googleError?.message}</p>;
+    signUpError = <p className="text-red-600">Error: {error?.message || googleError?.message}</p>;
   }
   if (googleLoading || loading) {
     return <Loading />;
@@ -29,8 +28,32 @@ export const Login = () => {
     <div className="flex justify-center items-center h-screen">
       <div className="card mx-w-lg bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="text-center font-bold text-3xl">Login</h2>
+          <h2 className="text-center font-bold text-3xl">Sign Up</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">Name</span>
+              </label>
+              <input
+                {...register("name", {
+                  required: {
+                    value: true,
+                    message: "Name is required",
+                  },
+                  pattern: {
+                    value: /[A-Za-z]{1,32}/,
+                    message: "Please enter valid name",
+                  },
+                })}
+                type="text"
+                placeholder="Enter your name"
+                className="input input-bordered w-full max-w-xs"
+              />
+              <label className="label">
+                {errors.name?.type === "required" && <span className="label-text-alt text-red-600">{errors.name.message}</span>}
+                {errors.name?.type === "pattern" && <span className="label-text-alt text-red-600">{errors.name.message}</span>}
+              </label>
+            </div>
             <div className="form-control w-full max-w-xs">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -79,13 +102,13 @@ export const Login = () => {
                 {errors.password?.type === "minLength" && <span className="label-text-alt text-red-600">{errors.password.message}</span>}
               </label>
             </div>
-            {signInError}
-            <input className="btn text-white w-full max-w-xs" type="submit" value="Login" />
+            {signUpError}
+            <input className="btn text-white w-full max-w-xs" type="submit" value="Sign Up" />
           </form>
           <p className="text-sm text-center">
-            New to Doctor's portal?{" "}
-            <Link to="/signup" className="text-primary font-bold">
-              Create an account
+            Already have an account?{" "}
+            <Link to="/login" className="text-primary font-bold">
+              Please login
             </Link>
           </p>
           <div className="divider">OR</div>
