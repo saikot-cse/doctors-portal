@@ -1,29 +1,35 @@
 import React from "react";
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { useSignInWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
 import { Loading } from "../Shared/Loading";
 export const Login = () => {
+  const [updateProfile, updating, updateError] = useUpdateProfile(auth);
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const onSubmit = (data) => {
-    signInWithEmailAndPassword(data.email, data.password);
-    navigate("/");
+  const onSubmit = async(data) => {
+    await signInWithEmailAndPassword(data.email, data.password);
+    await updateProfile({ displayName: data.name });
 
   };
   const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
   const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
   let signInError;
-  if (googleError || error) {
-    signInError = <p className="text-red-600">Error: {error?.message || googleError?.message}</p>;
+  if (googleError || error || updateError) {
+    signInError = <p className="text-red-600">Error: {error?.message || googleError?.message ||updateError?.message}</p>;
   }
-  if (googleLoading || loading) {
+  if (googleLoading || loading || updating) {
     return <Loading />;
+  }
+  if(googleUser || user){
+    navigate(from,{replace:true});
   }
   return (
     <div className="flex justify-center items-center h-screen">
