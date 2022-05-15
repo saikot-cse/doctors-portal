@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from "react";
-import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from "react-firebase-hooks/auth";
+import React, { useEffect } from "react";
+import { useSignInWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import auth from "../../firebase.init";
 import { Loading } from "../Shared/Loading";
 export const Login = () => {
@@ -11,36 +12,37 @@ export const Login = () => {
   const from = location.state?.from?.pathname || "/";
   const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
   const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
-  const emailRef = useRef("");
-  const [sendPasswordResetEmail, sending, resetError] = useSendPasswordResetEmail(auth);
-  const resetPassword = async () => {
-    const email = emailRef.current.value;
-    if (email) {
-      await sendPasswordResetEmail(email);
-      alert("Sent email");
-    } else {
-      alert("please enter your email address");
-    }
-  };
+  // const emailRef = useRef("");
+  // const [sendPasswordResetEmail, sending, resetError] = useSendPasswordResetEmail(auth);
+  // const resetPassword = async () => {
+  //   const email = emailRef.current.value;
+  //   if (email) {
+  //     await sendPasswordResetEmail(email);
+  //     alert("Sent email");
+  //   } else {
+  //     alert("please enter your email address");
+  //   }
+  // };
   const {
     register,
     formState: { errors },
-    handleSubmit,
+    handleSubmit
   } = useForm();
   const onSubmit = async (data) => {
     await signInWithEmailAndPassword(data.email, data.password);
     await updateProfile({ displayName: data.name });
+    toast("Login Successfull")
   };
   let signInError;
-  if (googleError || error || updateError || resetError) {
-    signInError = <p className="text-red-600">{error?.message || googleError?.message || updateError?.message || resetError?.message}</p>;
+  if (googleError || error || updateError ) {
+    signInError = <p className="text-red-600">{error?.message || googleError?.message || updateError?.message }</p>;
   }
   useEffect(() => {
     if (googleUser || user) {
       navigate(from, { replace: true });
     }
   }, [googleUser, user, navigate, from]);
-  if (googleLoading || loading || updating || sending) {
+  if (googleLoading || loading || updating) {
     return <Loading />;
   }
 
@@ -66,7 +68,6 @@ export const Login = () => {
                   },
                 })}
                 type="email"
-                ref={emailRef} 
                 placeholder="Enter your email"
                 className="input input-bordered w-full max-w-xs"
               />
@@ -99,7 +100,7 @@ export const Login = () => {
                 {errors.password?.type === "minLength" && <span className="label-text-alt text-red-600">{errors.password.message}</span>}
               </label>
             </div>
-            <button onClick={resetPassword} className="text-primary">
+            <button  className="text-primary">
               Forgot Password?
             </button>
             {signInError}

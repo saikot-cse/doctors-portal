@@ -9,6 +9,12 @@ import { SignUp } from "./Pages/Login/SignUp";
 import { Notfound } from "./Pages/NotFound/Notfound";
 import { Reviews } from "./Pages/Reviews/Reviews";
 import { Navbar } from "./Pages/Shared/Navbar";
+import React from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Dashboard } from "./Pages/Dashboard/Dashboard";
+import { MyAppoinment } from "./Pages/Dashboard/MyAppoinment";
+import { MyReview } from "./Pages/Dashboard/MyReview";
 function App() {
   return (
     <div className="max-w-7xl mx-auto px-10">
@@ -25,12 +31,25 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="dashboard"
+          element={
+            <RequireAuth>
+              <Dashboard />
+            </RequireAuth>
+          }
+        >
+          <Route index element={<MyAppoinment/>}/>
+          <Route path="review" element={<MyReview/>}/>
+        </Route>
         <Route path="reviews" element={<Reviews />} />
         <Route path="contact" element={<Contact />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="*" element={<Notfound />} />
       </Routes>
+      <ToastContainer/>
+      
     </div>
   );
 }
