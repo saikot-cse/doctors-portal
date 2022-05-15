@@ -1,7 +1,7 @@
-import React from "react";
-import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from "react-firebase-hooks/auth";
+import React, { useEffect } from "react";
+import { useCreateUserWithEmailAndPassword, useSendEmailVerification, useSignInWithGoogle, useUpdateProfile } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
 import { Loading } from "../Shared/Loading";
 export const SignUp = () => {
@@ -12,23 +12,31 @@ export const SignUp = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const onSubmit = async(data) => {
+  const onSubmit = async (data) => {
     await createUserWithEmailAndPassword(data.email, data.password);
-    navigate("/login");
+    await sendEmailVerification();
     await updateProfile({ displayName: data.name });
   };
   const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
   const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(auth);
-  
+  const [sendEmailVerification, sending, varificationError] = useSendEmailVerification(auth);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   let signUpError;
-  if (googleError || error || updateError) {
-    signUpError = <p className="text-red-600">Error: {error?.message || googleError?.message || updateError?.message}</p>;
+  if (googleError || error || updateError || varificationError) {
+    signUpError = <p className="text-red-600">Error: {error?.message || googleError?.message || updateError?.message || varificationError?.message}</p>;
   }
-  if (googleLoading || loading || updating) {
+  useEffect(() => {
+    if (googleUser || user) {
+      navigate(from, { replace: true });
+    }
+  }, [googleUser, user, navigate, from]);
+  if (googleLoading || loading || updating || sending) {
     return <Loading />;
   }
-  if(googleUser || user){
-    console.log(googleUser || user);
+
+  if (googleUser || user) {
+    navigate(from, { replace: true });
   }
   return (
     <div className="flex justify-center items-center h-screen">
