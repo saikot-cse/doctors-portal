@@ -4,8 +4,11 @@ import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import auth from "../../firebase.init";
+import { useTokens } from "../../Hooks/useTokens";
 import { Loading } from "../Shared/Loading";
 export const Login = () => {
+  
+  
   const [updateProfile, updating, updateError] = useUpdateProfile(auth);
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,15 +36,16 @@ export const Login = () => {
     await updateProfile({ displayName: data.name });
     toast("Login Successfull")
   };
+  const [token] = useTokens(user || googleUser);
   let signInError;
   if (googleError || error || updateError ) {
     signInError = <p className="text-red-600">{error?.message || googleError?.message || updateError?.message }</p>;
   }
   useEffect(() => {
-    if (googleUser || user) {
+    if (token) {
       navigate(from, { replace: true });
     }
-  }, [googleUser, user, navigate, from]);
+  }, [token, navigate, from]);
   if (googleLoading || loading || updating) {
     return <Loading />;
   }

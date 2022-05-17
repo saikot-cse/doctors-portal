@@ -3,6 +3,7 @@ import { useCreateUserWithEmailAndPassword, useSendEmailVerification, useSignInW
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../firebase.init";
+import { useTokens } from "../../Hooks/useTokens";
 import { Loading } from "../Shared/Loading";
 export const SignUp = () => {
   const navigate = useNavigate();
@@ -16,27 +17,27 @@ export const SignUp = () => {
     await createUserWithEmailAndPassword(data.email, data.password);
     await sendEmailVerification();
     await updateProfile({ displayName: data.name });
+
+
   };
   const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
   const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(auth);
   const [sendEmailVerification, sending, varificationError] = useSendEmailVerification(auth);
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  const [token] = useTokens(googleUser || user)
   let signUpError;
   if (googleError || error || updateError || varificationError) {
     signUpError = <p className="text-red-600">Error: {error?.message || googleError?.message || updateError?.message || varificationError?.message}</p>;
   }
+
   useEffect(() => {
-    if (googleUser || user) {
+    if (token) {
       navigate(from, { replace: true });
     }
-  }, [googleUser, user, navigate, from]);
+  }, [token, navigate, from]);
   if (googleLoading || loading || updating || sending) {
     return <Loading />;
-  }
-
-  if (googleUser || user) {
-    navigate(from, { replace: true });
   }
   return (
     <div className="flex justify-center items-center h-screen">
